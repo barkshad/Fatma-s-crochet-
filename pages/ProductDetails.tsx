@@ -82,7 +82,7 @@ const ProductDetails: React.FC = () => {
               </div>
 
               <h1 className="text-4xl md:text-5xl font-serif font-bold text-brand-brown mb-4 leading-tight">{product.name}</h1>
-              <p className="text-3xl font-bold text-brand-sageDark mb-8">${product.price.toFixed(2)}</p>
+              <p className="text-3xl font-bold text-brand-sageDark mb-8">Ksh {product.price.toLocaleString()}</p>
               
               <div className="prose prose-stone text-brand-text/80 mb-10 text-lg leading-relaxed">
                 <p>{product.description}</p>

@@ -286,7 +286,7 @@ const ProductManager: React.FC = () => {
                 </select>
                 <input 
                   type="number" 
-                  placeholder="Price" 
+                  placeholder="Price (Ksh)" 
                   value={formData.price}
                   onChange={e => setFormData({...formData, price: parseFloat(e.target.value)})}
                   required
@@ -375,7 +375,7 @@ const ProductManager: React.FC = () => {
                   )}
                   <div className="flex-1">
                     <h3 className="font-bold text-brand-brown truncate">{product.name}</h3>
-                    <p className="text-sm text-brand-text/60 mb-2">${product.price}</p>
+                    <p className="text-sm text-brand-text/60 mb-2">Ksh {product.price.toLocaleString()}</p>
                     <div className="flex gap-2">
                       <button 
                         onClick={() => handleEdit(product)}

@@ -63,7 +63,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         
         <div className="mt-auto pt-4 flex items-center justify-between border-t border-brand-brown/10">
           <p className="text-xl font-bold text-brand-text">
-            ${product.price.toFixed(2)}
+            Ksh {product.price.toLocaleString()}
           </p>
           <a 
             href={whatsappUrl}
