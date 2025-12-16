@@ -21,6 +21,7 @@ export interface Testimonial {
 export interface SiteContent {
   heroTitle: string;
   heroSubtitle: string;
+  heroBackgroundVideo: string;
   heroImage1: string;
   heroImage2: string;
   aboutTitle: string;

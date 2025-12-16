@@ -45,12 +45,28 @@ const Home: React.FC = () => {
     >
       
       {/* Hero Section */}
-      <section ref={heroRef} className="relative min-h-[90vh] flex items-center justify-center py-20 px-4 perspective-1000">
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <section ref={heroRef} className="relative min-h-[90vh] flex items-center justify-center py-20 px-4 perspective-1000 overflow-hidden">
+        
+        {/* Background Video Layer */}
+        {content.heroBackgroundVideo && (
+          <div className="absolute inset-0 z-0">
+             <video 
+               src={content.heroBackgroundVideo}
+               autoPlay
+               loop
+               muted
+               playsInline
+               className="w-full h-full object-cover"
+             />
+             <div className="absolute inset-0 bg-brand-cream/80 backdrop-blur-[2px]"></div>
+          </div>
+        )}
+
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
           
           {/* Hero Text */}
           <motion.div style={{ y: yHeroText }} className="relative z-10">
-            <div className="glass p-8 md:p-12 rounded-[2rem] relative overflow-hidden">
+            <div className={`p-8 md:p-12 rounded-[2rem] relative overflow-hidden ${content.heroBackgroundVideo ? 'bg-white/40 backdrop-blur-md border border-white/50 shadow-xl' : 'glass'}`}>
                {/* Shine Effect on Load */}
                <motion.div 
                  initial={{ x: '-100%' }}
@@ -77,7 +93,7 @@ const Home: React.FC = () => {
               </div>
 
               <Reveal delay={0.2}>
-                <p className="text-lg md:text-xl text-brand-text/80 font-sans leading-relaxed mb-8">
+                <p className="text-lg md:text-xl text-brand-text/80 font-sans leading-relaxed mb-8 font-medium">
                   {content.heroSubtitle}
                 </p>
               </Reveal>
@@ -135,12 +151,14 @@ const Home: React.FC = () => {
                 />
              </motion.div>
              
-             {/* Decorative Elements */}
-             <motion.div 
-               animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-               transition={{ duration: 4, repeat: Infinity }}
-               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-brand-sageDark/20 rounded-full blur-3xl z-0" 
-             />
+             {/* Decorative Elements (Only if no video) */}
+             {!content.heroBackgroundVideo && (
+               <motion.div 
+                 animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                 transition={{ duration: 4, repeat: Infinity }}
+                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-brand-sageDark/20 rounded-full blur-3xl z-0" 
+               />
+             )}
           </div>
         </div>
       </section>

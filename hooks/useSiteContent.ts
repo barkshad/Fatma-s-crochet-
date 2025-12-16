@@ -7,6 +7,7 @@ import { WHATSAPP_NUMBER } from '../constants';
 const DEFAULT_CONTENT: SiteContent = {
   heroTitle: "Handmade With Love, \nOne Stitch at a Time",
   heroSubtitle: "Discover our collection of cozy sweaters, custom bags, and baby gifts. Each piece is crafted by hand for a unique touch.",
+  heroBackgroundVideo: "",
   heroImage1: "https://picsum.photos/id/1025/400/500",
   heroImage2: "https://picsum.photos/id/445/400/500",
   aboutTitle: "Hi, I'm Fatma!",
