@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { MessageCircle, Video, Heart } from 'lucide-react';
 import { Product } from '../types';
 import { WHATSAPP_NUMBER } from '../constants';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 
 interface ProductCardProps {
   product: Product;
@@ -13,29 +13,43 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi Fatma, I'm interested in the ${product.name}!`;
   const isVideo = (product.image?.includes('/video/upload/') || product.image?.match(/\.(mp4|webm|mov)$/i));
 
-  // 3D Tilt Logic
+  // 3D Tilt & Spotlight Logic
   const ref = useRef<HTMLDivElement>(null);
   
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
+  // Spotlight coordinates (pixels from top/left)
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
   const mouseXSpring = useSpring(x);
   const mouseYSpring = useSpring(y);
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7deg", "-7deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
+
+  // Create the gradient background for spotlight
+  const background = useMotionTemplate`radial-gradient(
+    650px circle at ${mouseX}px ${mouseY}px,
+    rgba(255, 255, 255, 0.4),
+    transparent 80%
+  )`;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
+    
+    // Tilt calculations (normalized -0.5 to 0.5)
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
+    
     x.set(xPct);
     y.set(yPct);
+
+    // Spotlight calculations (absolute px)
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
   };
 
   const handleMouseLeave = () => {
@@ -53,10 +67,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
-      className="group h-full perspective-1000"
+      className="group h-full perspective-1000 relative"
     >
-      <div className="glass-card rounded-2xl overflow-hidden flex flex-col h-full relative shadow-sm hover:shadow-2xl transition-shadow duration-500 ease-out bg-white/40">
+      <div className="glass-card rounded-2xl overflow-hidden flex flex-col h-full relative shadow-sm hover:shadow-2xl transition-shadow duration-500 ease-out bg-white/40 border border-white/40">
         
+        {/* Spotlight Effect Overlay */}
+        <motion.div
+          className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition duration-300 group-hover:opacity-100 z-30"
+          style={{ background }}
+        />
+
         <Link to={`/products/${product.id}`} className="block relative overflow-hidden aspect-[4/5] z-10">
           {isVideo ? (
             <div className="relative w-full h-full">
@@ -68,7 +88,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 playsInline
                 autoPlay
               />
-              <div className="absolute top-3 right-3 glass px-2 py-1 rounded-full text-brand-brown backdrop-blur-md flex items-center gap-1">
+              <div className="absolute top-3 right-3 glass px-2 py-1 rounded-full text-brand-brown backdrop-blur-md flex items-center gap-1 z-20">
                  <Video size={14} /> <span className="text-xs font-bold">Video</span>
               </div>
             </div>

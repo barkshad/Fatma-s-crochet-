@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Heart, Star, Sparkles, MessageCircle, Loader2 } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
+import Magnetic from '../components/Magnetic';
 import { TESTIMONIALS } from '../constants';
 import { useProducts } from '../hooks/useProducts';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -141,22 +142,27 @@ const Home: React.FC = () => {
           </div>
 
           <Reveal delay={0.8} className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-            <Link 
-              to="/products" 
-              className="group bg-brand-roseDark text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-brand-brown transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:-translate-y-1 flex items-center justify-center gap-3"
-            >
-               <span>View Collection</span> 
-               <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <a 
-              href={`https://wa.me/${content.whatsappNumber}`}
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-white/10 backdrop-blur-md border-2 border-white/50 text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-white hover:text-brand-brown transition-all duration-300 shadow-lg flex items-center justify-center gap-3"
-            >
-              <MessageCircle size={22} />
-              <span>Custom Order</span>
-            </a>
+            <Magnetic>
+              <Link 
+                to="/products" 
+                className="group bg-brand-roseDark text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-brand-brown transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] flex items-center justify-center gap-3"
+              >
+                <span>View Collection</span> 
+                <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Magnetic>
+            
+            <Magnetic>
+              <a 
+                href={`https://wa.me/${content.whatsappNumber}`}
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-white/10 backdrop-blur-md border-2 border-white/50 text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-white hover:text-brand-brown transition-all duration-300 shadow-lg flex items-center justify-center gap-3"
+              >
+                <MessageCircle size={22} />
+                <span>Custom Order</span>
+              </a>
+            </Magnetic>
           </Reveal>
         </div>
 
@@ -195,9 +201,11 @@ const Home: React.FC = () => {
           )}
 
           <Reveal delay={0.4} className="text-center mt-16">
-            <Link to="/products" className="inline-flex items-center text-lg font-bold text-brand-brown bg-white/50 px-8 py-3 rounded-full hover:bg-white transition-all shadow-sm hover:shadow-lg hover:-translate-y-1 border border-brand-rose/20 backdrop-blur-sm">
-              Explore Full Catalog <ArrowRight size={20} className="ml-2" />
-            </Link>
+            <Magnetic>
+              <Link to="/products" className="inline-flex items-center text-lg font-bold text-brand-brown bg-white/50 px-8 py-3 rounded-full hover:bg-white transition-all shadow-sm hover:shadow-lg hover:-translate-y-1 border border-brand-rose/20 backdrop-blur-sm">
+                Explore Full Catalog <ArrowRight size={20} className="ml-2" />
+              </Link>
+            </Magnetic>
           </Reveal>
         </div>
       </section>
