@@ -30,6 +30,8 @@ const ProductDetails: React.FC = () => {
 
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi Fatma! I'd like to order the ${product.name} (Color: ${selectedColor}). Is it available?`;
 
+  const isVideo = (product.image?.includes('/video/upload/') || product.image?.match(/\.(mp4|webm|mov)$/i));
+
   return (
     <div className="bg-brand-cream min-h-screen py-10 animate-fade-in">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,13 +44,24 @@ const ProductDetails: React.FC = () => {
         <div className="bg-white rounded-3xl shadow-sm border border-brand-rose/20 overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2">
             
-            {/* Image Section */}
-            <div className="h-96 md:h-full bg-brand-stone-100 relative">
-               <img 
-                 src={product.image} 
-                 alt={product.name} 
-                 className="w-full h-full object-cover"
-               />
+            {/* Image/Video Section */}
+            <div className="h-96 md:h-full bg-brand-stone-100 relative min-h-[500px]">
+               {isVideo ? (
+                 <video 
+                   src={product.image} 
+                   className="w-full h-full object-cover"
+                   controls
+                   autoPlay
+                   muted
+                   loop
+                 />
+               ) : (
+                 <img 
+                   src={product.image} 
+                   alt={product.name} 
+                   className="w-full h-full object-cover"
+                 />
+               )}
             </div>
 
             {/* Info Section */}

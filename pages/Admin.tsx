@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { uploadToCloudinary } from '../utils/cloudinary';
-import { Plus, Loader2, Image as ImageIcon, CheckCircle, Trash2, Edit2, Save, LogOut, Layout, ShoppingBag, Database } from 'lucide-react';
+import { Plus, Loader2, CheckCircle, Trash2, Edit2, Save, LogOut, Layout, ShoppingBag, Database, Video } from 'lucide-react';
 import { Product, SiteContent } from '../types';
 import { useProducts } from '../hooks/useProducts';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -151,7 +151,7 @@ const ProductManager: React.FC = () => {
   };
 
   const handleSeedDatabase = async () => {
-    if (!window.confirm("This will upload all demo products to your Firebase database. Continue?")) return;
+    if (!window.confirm(`This will upload ${DEMO_PRODUCTS.length} demo products to your Firebase database. Duplicates may be created if data already exists. Continue?`)) return;
     setIsLoading(true);
     try {
       let count = 0;
@@ -213,6 +213,16 @@ const ProductManager: React.FC = () => {
     }
   };
 
+  const isVideoPreview = (url: string | null, file: File | null) => {
+    if (file) {
+      return file.type.startsWith('video/');
+    }
+    if (url) {
+      return url.includes('/video/upload/') || url.match(/\.(mp4|webm|mov)$/i);
+    }
+    return false;
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Form Section */}
@@ -229,16 +239,20 @@ const ProductManager: React.FC = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-             {/* Image Upload */}
+             {/* Media Upload */}
              <div>
-                <label className="block text-xs font-bold text-brand-brown mb-1">Image</label>
+                <label className="block text-xs font-bold text-brand-brown mb-1">Product Media (Image or Video)</label>
                 <div className="relative">
                    {preview && (
-                     <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded-lg mb-2" />
+                     isVideoPreview(preview, imageFile) ? (
+                       <video src={preview} controls className="w-full h-48 object-cover rounded-lg mb-2" />
+                     ) : (
+                       <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded-lg mb-2" />
+                     )
                    )}
                    <input 
                       type="file" 
-                      accept="image/*"
+                      accept="image/*,video/*"
                       onChange={(e) => {
                         if (e.target.files?.[0]) {
                           setImageFile(e.target.files[0]);
@@ -336,47 +350,52 @@ const ProductManager: React.FC = () => {
       <div className="lg:col-span-2">
         <div className="flex justify-between items-center mb-4">
            <h2 className="text-xl font-serif font-bold text-brand-brown">Inventory ({products.length})</h2>
-           {isMockData && (
-             <button 
-                onClick={handleSeedDatabase}
-                disabled={isLoading}
-                className="bg-brand-rose text-brand-brown px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-brand-roseDark transition-colors"
-             >
-                {isLoading ? <Loader2 className="animate-spin" size={16}/> : <Database size={16}/>}
-                Push Demo Data to Database
-             </button>
-           )}
+           <button 
+              onClick={handleSeedDatabase}
+              disabled={isLoading}
+              className="bg-brand-rose text-brand-brown px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-brand-roseDark transition-colors"
+           >
+              {isLoading ? <Loader2 className="animate-spin" size={16}/> : <Database size={16}/>}
+              Push All Demo Data to DB
+           </button>
         </div>
         
         {productsLoading ? (
            <div className="flex justify-center p-8"><Loader2 className="animate-spin text-brand-sageDark"/></div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {products.map(product => (
-              <div key={product.id} className="bg-white p-4 rounded-xl shadow-sm border border-brand-rose/10 flex gap-4">
-                <img src={product.image} alt={product.name} className="w-20 h-20 rounded-lg object-cover bg-gray-100" />
-                <div className="flex-1">
-                  <h3 className="font-bold text-brand-brown truncate">{product.name}</h3>
-                  <p className="text-sm text-brand-text/60 mb-2">${product.price}</p>
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => handleEdit(product)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                      title={isMockData ? "Demo data is read-only" : "Edit"}
-                    >
-                      <Edit2 size={16} />
-                    </button>
-                    <button 
-                      onClick={() => handleDelete(product.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                      title={isMockData ? "Demo data is read-only" : "Delete"}
-                    >
-                      <Trash2 size={16} />
-                    </button>
+            {products.map(product => {
+               const isVideo = product.image?.includes('/video/upload/') || product.image?.match(/\.(mp4|webm|mov)$/i);
+               return (
+                <div key={product.id} className="bg-white p-4 rounded-xl shadow-sm border border-brand-rose/10 flex gap-4">
+                  {isVideo ? (
+                    <video src={product.image} className="w-20 h-20 rounded-lg object-cover bg-gray-100" />
+                  ) : (
+                    <img src={product.image} alt={product.name} className="w-20 h-20 rounded-lg object-cover bg-gray-100" />
+                  )}
+                  <div className="flex-1">
+                    <h3 className="font-bold text-brand-brown truncate">{product.name}</h3>
+                    <p className="text-sm text-brand-text/60 mb-2">${product.price}</p>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => handleEdit(product)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                        title={isMockData ? "Demo data is read-only" : "Edit"}
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(product.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                        title={isMockData ? "Demo data is read-only" : "Delete"}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+               );
+            })}
           </div>
         )}
       </div>
