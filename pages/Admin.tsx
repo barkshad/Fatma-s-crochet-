@@ -13,12 +13,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Dashboard from '../components/admin/Dashboard';
 import ProductManager from '../components/admin/ProductManager';
 import ContentManager from '../components/admin/ContentManager';
+import { useToast } from '../context/ToastContext';
 
 const Admin: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [activeView, setActiveView] = useState<'dashboard' | 'products' | 'content'>('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { addToast } = useToast();
 
   // Check auth on load
   useEffect(() => {
@@ -36,14 +38,16 @@ const Admin: React.FC = () => {
     if (password === '12345') {
       setIsAuthenticated(true);
       localStorage.setItem('admin_auth', 'true');
+      addToast('Welcome back, Admin!', 'success');
     } else {
-      alert('Incorrect Password');
+      addToast('Incorrect Password. Access Denied.', 'error');
     }
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('admin_auth');
+    addToast('Logged out successfully.', 'info');
   };
 
   if (!isAuthenticated) {

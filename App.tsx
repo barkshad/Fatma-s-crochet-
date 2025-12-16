@@ -13,6 +13,7 @@ import CustomCursor from './components/CustomCursor';
 import Preloader from './components/Preloader';
 import { MessageCircle } from 'lucide-react';
 import { WHATSAPP_NUMBER } from './constants';
+import { ToastProvider } from './context/ToastContext';
 
 // We need a wrapper component to use useLocation
 const AnimatedRoutes = () => {
@@ -44,7 +45,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <ToastProvider>
       <CustomCursor />
       <AnimatePresence mode="wait">
         {loading && (
@@ -95,7 +96,7 @@ function App() {
           </div>
         </Router>
       )}
-    </>
+    </ToastProvider>
   );
 }
 

@@ -10,11 +10,13 @@ import { useProducts } from '../../hooks/useProducts';
 import { Product } from '../../types';
 import { PRODUCTS as DEMO_PRODUCTS } from '../../constants';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useToast } from '../../context/ToastContext';
 
 const ProductManager: React.FC = () => {
   const { products, loading: productsLoading } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
+  const { addToast } = useToast();
   
   // Drawer State
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -72,7 +74,12 @@ const ProductManager: React.FC = () => {
 
   const handleDelete = async (id: string) => {
      if (window.confirm('Are you sure you want to delete this product?')) {
-        await deleteDoc(doc(db, "products", id));
+        try {
+          await deleteDoc(doc(db, "products", id));
+          addToast("Product deleted successfully", 'success');
+        } catch(e) {
+          addToast("Failed to delete product", 'error');
+        }
      }
   };
 
@@ -89,16 +96,18 @@ const ProductManager: React.FC = () => {
 
       if (editingProduct) {
         await updateDoc(doc(db, "products", editingProduct.id), payload);
+        addToast("Product updated successfully", 'success');
       } else {
         await addDoc(collection(db, "products"), {
           ...payload,
           createdAt: serverTimestamp()
         });
+        addToast("New product added successfully", 'success');
       }
       closeDrawer();
     } catch (error) {
       console.error(error);
-      alert("Error saving product");
+      addToast("Error saving product", 'error');
     } finally {
       setIsLoading(false);
     }
@@ -122,9 +131,10 @@ const ProductManager: React.FC = () => {
           createdAt: serverTimestamp()
         });
       }
-      alert('Seeding complete');
+      addToast('Database seeded successfully', 'success');
     } catch (e) {
       console.error(e);
+      addToast('Error seeding database', 'error');
     } finally {
       setIsLoading(false);
     }

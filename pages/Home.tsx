@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Heart, Star, Sparkles, MessageCircle, Loader2 } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import Magnetic from '../components/Magnetic';
+import StitchedSeparator from '../components/StitchedSeparator';
 import { TESTIMONIALS } from '../constants';
 import { useProducts } from '../hooks/useProducts';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -109,8 +110,7 @@ const Home: React.FC = () => {
                playsInline
                className="w-full h-full object-cover"
              />
-             {/* Gradient overlay: Transparent in center/top to show video, dark at bottom for text contrast if needed, 
-                 but mostly we rely on the text effect itself. Adding a very subtle vignette. */}
+             {/* Gradient overlay */}
              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/30 pointer-events-none"></div>
           </div>
         ) : (
@@ -210,6 +210,8 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      <StitchedSeparator />
+
       {/* Why Handmade? */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -235,6 +237,8 @@ const Home: React.FC = () => {
           </StaggerContainer>
         </div>
       </section>
+
+      <StitchedSeparator reverse />
 
       {/* Testimonials */}
       <section className="py-20 relative bg-brand-cream">

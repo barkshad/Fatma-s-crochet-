@@ -6,6 +6,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { uploadToCloudinary } from '../../utils/cloudinary';
 import { Loader2, Save, Layout, FileText, Share2, Upload } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useToast } from '../../context/ToastContext';
 
 const ContentManager: React.FC = () => {
   const { content, loading } = useSiteContent();
@@ -14,6 +15,7 @@ const ContentManager: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [files, setFiles] = useState<{[key: string]: File | null}>({});
   const [previews, setPreviews] = useState<{[key: string]: string}>({});
+  const { addToast } = useToast();
 
   useEffect(() => {
     if (content) setFormData(content);
@@ -38,10 +40,10 @@ const ContentManager: React.FC = () => {
         }
       }
       await setDoc(doc(db, 'site_content', 'main'), updatedData);
-      alert('Content updated!');
+      addToast('Content published successfully!', 'success');
     } catch (e) {
       console.error(e);
-      alert('Save failed.');
+      addToast('Failed to save changes.', 'error');
     } finally {
       setIsSaving(false);
     }

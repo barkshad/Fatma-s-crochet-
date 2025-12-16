@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MessageCircle, Video, Heart } from 'lucide-react';
 import { Product } from '../types';
@@ -12,6 +12,8 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi Fatma, I'm interested in the ${product.name}!`;
   const isVideo = (product.image?.includes('/video/upload/') || product.image?.match(/\.(mp4|webm|mov)$/i));
+
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // 3D Tilt & Spotlight Logic
   const ref = useRef<HTMLDivElement>(null);
@@ -77,16 +79,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           style={{ background }}
         />
 
-        <Link to={`/products/${product.id}`} className="block relative overflow-hidden aspect-[4/5] z-10">
+        <Link to={`/products/${product.id}`} className="block relative overflow-hidden aspect-[4/5] z-10 bg-brand-rose/10">
+          {/* Loading Skeleton */}
+          <div className={`absolute inset-0 bg-brand-rose/10 animate-pulse transition-opacity duration-500 ${isLoaded ? 'opacity-0' : 'opacity-100'}`} />
+
           {isVideo ? (
             <div className="relative w-full h-full">
               <video 
                 src={product.image} 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${isLoaded ? 'opacity-100 blur-0' : 'opacity-0 blur-sm'}`}
                 muted
                 loop
                 playsInline
                 autoPlay
+                onLoadedData={() => setIsLoaded(true)}
               />
               <div className="absolute top-3 right-3 glass px-2 py-1 rounded-full text-brand-brown backdrop-blur-md flex items-center gap-1 z-20">
                  <Video size={14} /> <span className="text-xs font-bold">Video</span>
@@ -96,7 +102,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <img 
               src={product.image} 
               alt={product.name} 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              onLoad={() => setIsLoaded(true)}
+              className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${isLoaded ? 'opacity-100 blur-0' : 'opacity-0 blur-sm'}`}
             />
           )}
           
