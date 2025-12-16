@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { uploadToCloudinary } from '../utils/cloudinary';
-import { generateProductDetailsFromImage } from '../utils/aiHelper';
-import { Plus, Loader2, Image as ImageIcon, CheckCircle, Trash2, Edit2, Save, LogOut, Layout, ShoppingBag, Sparkles, Database } from 'lucide-react';
+import { Plus, Loader2, Image as ImageIcon, CheckCircle, Trash2, Edit2, Save, LogOut, Layout, ShoppingBag, Database } from 'lucide-react';
 import { Product, SiteContent } from '../types';
 import { useProducts } from '../hooks/useProducts';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -105,7 +104,6 @@ const ProductManager: React.FC = () => {
   const { products, loading: productsLoading } = useProducts();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
   const initialFormState: Omit<Product, 'id'> = {
@@ -173,23 +171,6 @@ const ProductManager: React.FC = () => {
       alert("Failed to seed database.");
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleAiAutoFill = async () => {
-    if (!imageFile) return;
-    setIsAiGenerating(true);
-    try {
-      const aiData = await generateProductDetailsFromImage(imageFile);
-      setFormData(prev => ({
-        ...prev,
-        ...aiData
-      }));
-    } catch (error) {
-      console.error(error);
-      alert("Failed to auto-generate details. Please try again.");
-    } finally {
-      setIsAiGenerating(false);
     }
   };
 
@@ -267,25 +248,6 @@ const ProductManager: React.FC = () => {
                       className="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-rose file:text-brand-brown"
                     />
                 </div>
-                
-                {imageFile && !editingId && (
-                  <button
-                    type="button"
-                    onClick={handleAiAutoFill}
-                    disabled={isAiGenerating}
-                    className="w-full mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-brand-sageDark to-brand-sage text-white py-2 rounded-lg text-sm font-semibold shadow-sm hover:shadow-md transition-all active:scale-95"
-                  >
-                    {isAiGenerating ? (
-                      <>
-                        <Loader2 size={16} className="animate-spin" /> Analyzing Pattern...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles size={16} /> Magic Auto-Fill
-                      </>
-                    )}
-                  </button>
-                )}
               </div>
 
               <input 
@@ -354,7 +316,7 @@ const ProductManager: React.FC = () => {
               <div className="flex gap-2">
                 <button 
                   type="submit" 
-                  disabled={isLoading || isAiGenerating}
+                  disabled={isLoading}
                   className="flex-1 bg-brand-sageDark text-white py-2 rounded-lg font-bold hover:bg-brand-brown transition-colors flex justify-center items-center gap-2"
                 >
                   {isLoading ? <Loader2 className="animate-spin" size={18} /> : (editingId ? <Save size={18}/> : <Plus size={18} />)}
