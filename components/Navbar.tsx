@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ShoppingBag } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -18,15 +27,18 @@ const Navbar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 bg-brand-cream/90 backdrop-blur-md shadow-sm border-b border-brand-rose/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+    <nav className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? 'glass-nav h-20' : 'bg-transparent h-24'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div className="flex justify-between items-center h-full">
           
           {/* Logo */}
-          <Link to="/" className="flex-shrink-0 flex items-center gap-2">
-            <span className="text-2xl sm:text-3xl font-serif font-bold text-brand-brown tracking-tight">
-              Fatma's <span className="text-brand-sageDark">Crochet</span>
-            </span>
+          <Link to="/" className="flex-shrink-0 flex items-center gap-2 group">
+            <div className="relative">
+              <span className="absolute -inset-2 bg-brand-rose/50 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+              <span className="relative text-3xl md:text-4xl font-serif font-bold text-brand-brown tracking-tight">
+                Fatma's <span className="text-brand-sageDark">Crochet</span>
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Menu */}
@@ -35,9 +47,9 @@ const Navbar: React.FC = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`font-sans text-lg font-medium transition-colors duration-200 ${
+                className={`relative px-4 py-2 rounded-full font-sans text-lg font-medium transition-all duration-300 spring-transition hover:bg-white/40 ${
                   isActive(link.path) 
-                    ? 'text-brand-sageDark underline underline-offset-4 decoration-2' 
+                    ? 'text-brand-sageDark bg-white/60 shadow-sm' 
                     : 'text-brand-text hover:text-brand-sageDark'
                 }`}
               >
@@ -46,7 +58,7 @@ const Navbar: React.FC = () => {
             ))}
             <Link 
               to="/products" 
-              className="bg-brand-sageDark text-white px-5 py-2 rounded-full font-medium hover:bg-brand-brown transition-colors shadow-md flex items-center gap-2"
+              className="bg-brand-sageDark/90 backdrop-blur-sm text-white px-6 py-2.5 rounded-full font-medium hover:bg-brand-brown transition-all duration-300 shadow-lg hover:shadow-brand-sageDark/30 hover:-translate-y-1 flex items-center gap-2 spring-transition"
             >
               <ShoppingBag size={18} />
               Shop Now
@@ -57,7 +69,7 @@ const Navbar: React.FC = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
-              className="text-brand-text hover:text-brand-sageDark focus:outline-none"
+              className="p-2 rounded-full hover:bg-white/50 text-brand-text hover:text-brand-sageDark focus:outline-none transition-colors"
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -68,27 +80,27 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       {isOpen && (
-        <div className="md:hidden bg-brand-cream border-t border-brand-rose/20 absolute w-full left-0 animate-fade-in-down shadow-lg">
-          <div className="px-4 pt-4 pb-6 space-y-3">
+        <div className="md:hidden absolute top-full left-0 w-full glass border-t border-white/50 animate-fade-in-up">
+          <div className="px-4 py-6 space-y-3">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`block px-3 py-3 rounded-lg text-lg font-medium ${
+                className={`block px-4 py-3 rounded-2xl text-lg font-medium transition-all ${
                   isActive(link.path)
-                    ? 'bg-brand-rose/30 text-brand-brown'
-                    : 'text-brand-text hover:bg-brand-rose/10'
+                    ? 'bg-brand-rose/50 text-brand-brown shadow-inner'
+                    : 'text-brand-text hover:bg-white/40'
                 }`}
               >
                 {link.name}
               </Link>
             ))}
-            <div className="pt-4 border-t border-brand-rose/20">
+            <div className="pt-4 mt-4 border-t border-brand-brown/10">
               <Link
                 to="/products"
                 onClick={() => setIsOpen(false)}
-                className="block w-full text-center bg-brand-sageDark text-white px-4 py-3 rounded-xl font-medium shadow-sm active:scale-95 transition-transform"
+                className="block w-full text-center bg-brand-sageDark text-white px-4 py-3 rounded-xl font-medium shadow-lg active:scale-95 transition-transform"
               >
                 Browse Shop
               </Link>

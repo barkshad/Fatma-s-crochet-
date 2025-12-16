@@ -14,30 +14,32 @@ const Products: React.FC = () => {
     : products.filter(p => p.category === activeCategory);
 
   return (
-    <div className="bg-brand-cream min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-serif font-bold text-brand-brown mb-4">Shop Collection</h1>
-          <p className="text-brand-text/70 max-w-2xl mx-auto">
+        <div className="text-center mb-16 animate-fade-in-up">
+          <h1 className="text-5xl md:text-6xl font-serif font-bold text-brand-brown mb-6">Shop Collection</h1>
+          <p className="text-xl text-brand-text/80 max-w-2xl mx-auto font-sans">
             Explore our range of handmade crochet items. From fashion to home decor, everything is crafted with care.
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 w-full md:w-auto no-scrollbar">
-            <Filter size={20} className="text-brand-brown flex-shrink-0" />
-            <span className="font-semibold text-brand-brown mr-2">Filter:</span>
+        {/* Filters - Glass Bar */}
+        <div className="glass p-3 rounded-2xl mb-12 flex flex-col md:flex-row justify-between items-center gap-4 animate-fade-in-up delay-100">
+          <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto no-scrollbar px-2">
+            <div className="flex items-center gap-2 text-brand-brown mr-2">
+               <Filter size={20} />
+               <span className="font-bold hidden sm:inline">Filter:</span>
+            </div>
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
+                className={`px-5 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap spring-transition ${
                   activeCategory === cat
-                    ? 'bg-brand-sageDark text-white shadow-md'
-                    : 'bg-white text-brand-text border border-brand-rose/20 hover:bg-brand-rose/20'
+                    ? 'bg-brand-sageDark text-white shadow-lg scale-105'
+                    : 'bg-white/50 text-brand-text hover:bg-white hover:shadow-md'
                 }`}
               >
                 {cat}
@@ -45,30 +47,36 @@ const Products: React.FC = () => {
             ))}
           </div>
           
-          <p className="text-sm text-brand-text/60">
-            Showing {filteredProducts.length} items
-          </p>
+          <div className="px-4 py-2 bg-white/50 rounded-xl text-sm font-bold text-brand-brown/80 whitespace-nowrap">
+            {filteredProducts.length} Items
+          </div>
         </div>
 
         {/* Grid */}
         {loading ? (
-          <div className="flex justify-center items-center h-64">
+          <div className="flex justify-center items-center h-64 glass rounded-3xl">
              <Loader2 className="animate-spin text-brand-sageDark" size={48} />
           </div>
         ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {filteredProducts.map((product, idx) => (
+              <div 
+                key={product.id} 
+                className="animate-fade-in-up" 
+                style={{ animationDelay: `${idx * 100}ms` }}
+              >
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-white rounded-2xl border border-brand-rose/20">
-            <p className="text-xl text-brand-text/60 font-serif">No items found in this category yet.</p>
+          <div className="text-center py-24 glass rounded-3xl animate-fade-in-up">
+            <p className="text-2xl text-brand-text/60 font-serif mb-4">No items found in this category yet.</p>
             <button 
               onClick={() => setActiveCategory('All')}
-              className="mt-4 text-brand-sageDark font-semibold hover:underline"
+              className="px-6 py-3 bg-brand-sageDark text-white rounded-full font-bold hover:bg-brand-brown transition-colors"
             >
-              View all products
+              Clear Filters
             </button>
           </div>
         )}

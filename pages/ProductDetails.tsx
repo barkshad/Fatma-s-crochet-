@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MessageCircle, Truck, RefreshCw, ShieldCheck, Loader2 } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Truck, RefreshCw, ShieldCheck, Loader2, Star, Share2 } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '../constants';
 import { useProducts } from '../hooks/useProducts';
 
@@ -11,7 +11,7 @@ const ProductDetails: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-brand-cream">
+      <div className="min-h-screen flex items-center justify-center">
          <Loader2 className="animate-spin text-brand-sageDark" size={48} />
       </div>
     )
@@ -21,9 +21,9 @@ const ProductDetails: React.FC = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-brand-cream">
-        <h2 className="text-2xl font-serif text-brand-brown mb-4">Product Not Found</h2>
-        <Link to="/products" className="text-brand-sageDark underline">Back to Shop</Link>
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <h2 className="text-3xl font-serif text-brand-brown mb-4">Product Not Found</h2>
+        <Link to="/products" className="px-6 py-3 bg-brand-sageDark text-white rounded-full font-bold hover:scale-105 transition-transform">Back to Shop</Link>
       </div>
     );
   }
@@ -33,19 +33,19 @@ const ProductDetails: React.FC = () => {
   const isVideo = (product.image?.includes('/video/upload/') || product.image?.match(/\.(mp4|webm|mov)$/i));
 
   return (
-    <div className="bg-brand-cream min-h-screen py-10 animate-fade-in">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-10 px-4 animate-fade-in">
+      <div className="max-w-7xl mx-auto">
         
         {/* Breadcrumb */}
-        <Link to="/products" className="inline-flex items-center text-brand-text/60 hover:text-brand-sageDark mb-8 transition-colors">
-          <ArrowLeft size={18} className="mr-1" /> Back to Shop
+        <Link to="/products" className="inline-flex items-center text-brand-brown/70 hover:text-brand-sageDark mb-8 transition-colors font-bold bg-white/50 px-4 py-2 rounded-full backdrop-blur-sm shadow-sm hover:shadow-md">
+          <ArrowLeft size={18} className="mr-2" /> Back to Shop
         </Link>
 
-        <div className="bg-white rounded-3xl shadow-sm border border-brand-rose/20 overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="glass-heavy rounded-[2.5rem] overflow-hidden shadow-2xl border-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
             
             {/* Image/Video Section */}
-            <div className="h-96 md:h-full bg-brand-stone-100 relative min-h-[500px]">
+            <div className="relative min-h-[500px] lg:h-auto bg-brand-brown/5">
                {isVideo ? (
                  <video 
                    src={product.image} 
@@ -62,41 +62,53 @@ const ProductDetails: React.FC = () => {
                    className="w-full h-full object-cover"
                  />
                )}
+               <div className="absolute top-6 left-6">
+                 <span className="glass px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-brand-brown shadow-sm">
+                   {product.category}
+                 </span>
+               </div>
             </div>
 
             {/* Info Section */}
-            <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
-              <span className="text-sm font-bold text-brand-sageDark uppercase tracking-widest mb-2">{product.category}</span>
-              <h1 className="text-3xl md:text-4xl font-serif font-bold text-brand-brown mb-4">{product.name}</h1>
-              <p className="text-2xl font-medium text-brand-text mb-6">${product.price.toFixed(2)}</p>
+            <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center relative">
+              <div className="flex justify-between items-start mb-4">
+                 <div className="flex text-yellow-400 gap-1">
+                   {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+                   <span className="text-brand-text/40 text-sm ml-2 font-medium">(New Arrival)</span>
+                 </div>
+                 <button className="text-brand-text/40 hover:text-brand-sageDark transition-colors">
+                   <Share2 size={20} />
+                 </button>
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-serif font-bold text-brand-brown mb-4 leading-tight">{product.name}</h1>
+              <p className="text-3xl font-bold text-brand-sageDark mb-8">${product.price.toFixed(2)}</p>
               
-              <div className="prose prose-stone text-brand-text/80 mb-8">
+              <div className="prose prose-stone text-brand-text/80 mb-10 text-lg leading-relaxed">
                 <p>{product.description}</p>
               </div>
 
-              {/* Customization Dummy */}
-              <div className="mb-8">
-                <h3 className="font-semibold text-brand-brown mb-3">Select Preference:</h3>
-                <div className="flex gap-3">
+              {/* Customization */}
+              <div className="glass p-6 rounded-2xl mb-8 border border-white/60">
+                <h3 className="font-bold text-brand-brown mb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-brand-sageDark"></span>
+                  Customization Options:
+                </h3>
+                <div className="flex flex-wrap gap-3">
                   {['Default', 'Custom Color', 'Custom Size'].map(opt => (
                     <button
                       key={opt}
                       onClick={() => setSelectedColor(opt)}
-                      className={`px-4 py-2 rounded-lg text-sm border transition-all ${
+                      className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all border-2 ${
                         selectedColor === opt 
-                          ? 'border-brand-sageDark bg-brand-sageDark/10 text-brand-sageDark font-semibold' 
-                          : 'border-brand-rose/20 text-brand-text/60 hover:border-brand-sageDark/50'
+                          ? 'border-brand-sageDark bg-brand-sageDark text-white shadow-lg scale-105' 
+                          : 'border-transparent bg-white text-brand-text/70 hover:bg-white/80'
                       }`}
                     >
                       {opt}
                     </button>
                   ))}
                 </div>
-                {selectedColor !== 'Default' && (
-                  <p className="text-xs text-brand-sageDark mt-2">
-                    * For custom orders, please specify details in the WhatsApp message.
-                  </p>
-                )}
               </div>
 
               {/* Actions */}
@@ -104,33 +116,30 @@ const ProductDetails: React.FC = () => {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-green-500/30 transition-all flex items-center justify-center gap-3 mb-6"
+                className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-5 rounded-2xl shadow-lg hover:shadow-green-500/30 transition-all flex items-center justify-center gap-3 mb-8 text-lg hover:-translate-y-1 spring-transition"
               >
-                <MessageCircle size={24} />
+                <MessageCircle size={28} fill="white" />
                 Order on WhatsApp
               </a>
 
               {/* Details List */}
-              <div className="space-y-4 border-t border-brand-rose/20 pt-6 text-sm text-brand-text/70">
-                <div className="flex items-start gap-3">
-                  <ShieldCheck size={20} className="text-brand-brown mt-0.5" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-brand-brown/10">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-brand-rose/30 rounded-full text-brand-brown">
+                     <ShieldCheck size={20} />
+                  </div>
                   <div>
-                    <span className="font-semibold text-brand-brown block">Materials</span>
-                    {product.materials}
+                    <span className="font-bold text-brand-brown block mb-1">Materials</span>
+                    <p className="text-sm text-brand-text/70">{product.materials}</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <RefreshCw size={20} className="text-brand-brown mt-0.5" />
-                  <div>
-                    <span className="font-semibold text-brand-brown block">Care Instructions</span>
-                    {product.care}
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-brand-sage/30 rounded-full text-brand-sageDark">
+                     <RefreshCw size={20} />
                   </div>
-                </div>
-                 <div className="flex items-start gap-3">
-                  <Truck size={20} className="text-brand-brown mt-0.5" />
                   <div>
-                    <span className="font-semibold text-brand-brown block">Shipping</span>
-                    Calculated at checkout via WhatsApp. Worldwide shipping available.
+                    <span className="font-bold text-brand-brown block mb-1">Care</span>
+                    <p className="text-sm text-brand-text/70">{product.care}</p>
                   </div>
                 </div>
               </div>
