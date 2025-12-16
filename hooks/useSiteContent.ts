@@ -7,7 +7,8 @@ import { WHATSAPP_NUMBER } from '../constants';
 const DEFAULT_CONTENT: SiteContent = {
   heroTitle: "Handmade With Love, \nOne Stitch at a Time",
   heroSubtitle: "Discover our collection of cozy sweaters, custom bags, and baby gifts. Each piece is crafted by hand for a unique touch.",
-  heroBackgroundVideo: "",
+  // Placeholder cozy video
+  heroBackgroundVideo: "https://cdn.coverr.co/videos/coverr-hands-knitting-a-red-scarf-5394/1080p.mp4", 
   heroImage1: "https://picsum.photos/id/1025/400/500",
   heroImage2: "https://picsum.photos/id/445/400/500",
   aboutTitle: "Hi, I'm Fatma!",
@@ -30,7 +31,9 @@ export const useSiteContent = () => {
 
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
       if (docSnap.exists()) {
-        setContent({ ...DEFAULT_CONTENT, ...docSnap.data() } as SiteContent);
+        const data = docSnap.data() as SiteContent;
+        // Merge with defaults to ensure new fields (like video) have values if missing in DB
+        setContent({ ...DEFAULT_CONTENT, ...data });
       } else {
         // If it doesn't exist yet, create it with defaults
         setDoc(docRef, DEFAULT_CONTENT);

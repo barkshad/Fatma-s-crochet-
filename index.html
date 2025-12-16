@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -109,24 +109,48 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #6A8073; 
       }
+
+      /* Crochet Text Effect */
+      .crochet-text {
+        color: #F7EBEB; /* Soft Creamy Base */
+        text-shadow: 
+          1px 1px 0px #d4b8b8,
+          2px 2px 0px #bba3a3,
+          3px 3px 6px rgba(0,0,0,0.4);
+        filter: url(#wooly);
+        font-weight: 800;
+        letter-spacing: 0.02em;
+      }
     </style>
   <script type="importmap">
 {
   "imports": {
-    "vite": "https://esm.sh/vite@^7.3.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
-    "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
     "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1",
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
     "firebase/": "https://esm.sh/firebase@^12.7.0/"
   }
 }
 </script>
 </head>
   <body>
+    <!-- SVG Filters Definition for Crochet Effect -->
+    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+      <defs>
+        <filter id="wooly" x="-20%" y="-20%" width="140%" height="140%">
+          <!-- Create noise texture -->
+          <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="4" result="noise" />
+          <!-- Displace the text with the noise to create fuzzy edges -->
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" />
+          <!-- Optional: Composite with shadow or lighting if needed -->
+        </filter>
+      </defs>
+    </svg>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
