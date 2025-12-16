@@ -7,20 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
               brand: {
-                cream: '#FDFBF7',
-                sage: '#D6E4D9',
-                sageDark: '#8FA894',
-                rose: '#FCECEC',
-                roseDark: '#E5B8B8',
-                brown: '#8D7B68',
-                text: '#4A403A'
+                cream: '#FAF9F6',   /* Silk - Premium Off-White */
+                sage: '#E3EBE6',    /* Mist - Very Subtle Green */
+                sageDark: '#6A8073',/* Eucalyptus - Cinematic Green */
+                rose: '#F7EBEB',    /* Blush - Very Subtle Pink */
+                roseDark: '#BC8F8F',/* Dusty Quartz - Elegant Pink */
+                brown: '#43302B',   /* Espresso - High Contrast Text */
+                text: '#2C2420',    /* Near Black - Sharp Readability */
+                gold: '#C5A059'     /* Muted Gold - Luxury Accents */
               }
             },
             fontFamily: {
@@ -28,25 +29,26 @@
               sans: ['"Quicksand"', 'sans-serif'],
             },
             animation: {
-              'float': 'float 6s ease-in-out infinite',
-              'float-delayed': 'float 6s ease-in-out 3s infinite',
-              'blob': 'blob 10s infinite',
-              'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'float': 'float 8s ease-in-out infinite',
+              'float-delayed': 'float 8s ease-in-out 4s infinite',
+              'blob': 'blob 20s infinite alternate',
+              'fade-in-up': 'fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
               float: {
                 '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-20px)' },
+                '50%': { transform: 'translateY(-15px)' },
               },
               blob: {
                 '0%': { transform: 'translate(0px, 0px) scale(1)' },
                 '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                '66%': { transform: 'translate(-20px, 20px) scale(0.95)' },
                 '100%': { transform: 'translate(0px, 0px) scale(1)' },
               },
               fadeInUp: {
-                '0%': { opacity: '0', transform: 'translateY(40px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
+                '0%': { opacity: '0', transform: 'translateY(30px) scale(0.98)' },
+                '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
               }
             }
           }
@@ -55,58 +57,73 @@
     </script>
     <style>
       body {
-        background-color: #FDFBF7;
-        color: #4A403A;
+        background-color: #FAF9F6;
+        color: #2C2420;
         overflow-x: hidden;
+        /* Subtle Film Grain Texture */
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
       }
       
-      /* Glassmorphism Utilities */
+      /* Premium Glassmorphism - The "Lens" Effect */
       .glass {
-        background: rgba(255, 255, 255, 0.35);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(20px) saturate(180%); /* Saturation boost for cinematic feel */
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
         border: 1px solid rgba(255, 255, 255, 0.6);
-        box-shadow: 0 8px 32px 0 rgba(141, 123, 104, 0.1);
+        box-shadow: 
+          0 4px 6px -1px rgba(0, 0, 0, 0.02),
+          0 10px 15px -3px rgba(67, 48, 43, 0.05), /* Tinted shadow (brand.brown) */
+          inset 0 0 20px rgba(255, 255, 255, 0.5); /* Inner glow */
       }
       
       .glass-card {
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px) saturate(140%);
+        -webkit-backdrop-filter: blur(12px) saturate(140%);
         border: 1px solid rgba(255, 255, 255, 0.8);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 10px 40px -10px rgba(67, 48, 43, 0.08);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      
+      .glass-heavy {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(30px) saturate(200%);
+        -webkit-backdrop-filter: blur(30px) saturate(200%);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 20px 50px -12px rgba(67, 48, 43, 0.15);
       }
 
       .glass-nav {
-        background: rgba(253, 251, 247, 0.7);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        background: rgba(250, 249, 246, 0.8); /* Matches brand.cream */
+        backdrop-filter: blur(24px) saturate(160%);
+        -webkit-backdrop-filter: blur(24px) saturate(160%);
+        border-bottom: 1px solid rgba(67, 48, 43, 0.05);
       }
 
       /* Scrollbar */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 10px;
       }
       ::-webkit-scrollbar-track {
-        background: #FDFBF7; 
+        background: #FAF9F6; 
       }
       ::-webkit-scrollbar-thumb {
-        background: #D6E4D9; 
-        border-radius: 4px;
+        background: #C4C9C6; 
+        border-radius: 5px;
+        border: 2px solid #FAF9F6;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #8FA894; 
+        background: #6A8073; 
       }
 
       /* Spring Physics Transition */
       .spring-transition {
-        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       
       .hover-lift:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        transform: translateY(-8px) scale(1.01);
+        box-shadow: 0 25px 50px -12px rgba(67, 48, 43, 0.15);
       }
     </style>
   <script type="importmap">

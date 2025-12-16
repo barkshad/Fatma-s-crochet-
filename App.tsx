@@ -14,14 +14,21 @@ import { WHATSAPP_NUMBER } from './constants';
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen font-sans text-brand-text bg-brand-cream relative selection:bg-brand-rose selection:text-brand-brown">
+      <div className="flex flex-col min-h-screen font-sans text-brand-text bg-brand-cream relative selection:bg-brand-roseDark selection:text-white">
         
-        {/* Animated Background Blobs */}
+        {/* Cinematic Atmospheric Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-          <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-rose/60 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-          <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-brand-sage/60 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-          <div className="absolute -bottom-32 left-20 w-96 h-96 bg-brand-brown/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/40 rounded-full filter blur-3xl opacity-50"></div>
+          {/* Warm glow top left - simulates sun flare */}
+          <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-brand-rose/60 rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-blob"></div>
+          
+          {/* Cool mist top right */}
+          <div className="absolute top-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-brand-sage/50 rounded-full mix-blend-multiply filter blur-[120px] opacity-60 animate-blob animation-delay-2000"></div>
+          
+          {/* Deep grounding tone bottom left */}
+          <div className="absolute bottom-[-20%] left-[-10%] w-[40vw] h-[40vw] bg-brand-brown/5 rounded-full mix-blend-normal filter blur-[80px] opacity-40 animate-blob animation-delay-4000"></div>
+          
+          {/* Center highlight - mimics studio lighting */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white rounded-full mix-blend-overlay filter blur-[100px] opacity-40"></div>
         </div>
 
         <Navbar />
@@ -39,15 +46,16 @@ function App() {
 
         <Footer />
 
-        {/* Floating WhatsApp Button */}
+        {/* Floating WhatsApp Button - Refined Design */}
         <a
           href={`https://wa.me/${WHATSAPP_NUMBER}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-8 right-8 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_40px_rgba(37,211,102,0.4)] transition-all duration-500 hover:scale-110 spring-transition flex items-center justify-center border-4 border-white/30 backdrop-blur-sm"
+          className="fixed bottom-8 right-8 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_10px_40px_-10px_rgba(37,211,102,0.6)] hover:shadow-[0_20px_50px_-10px_rgba(37,211,102,0.8)] transition-all duration-500 hover:scale-105 spring-transition flex items-center justify-center border border-white/20 backdrop-blur-sm group"
           aria-label="Chat on WhatsApp"
         >
-          <MessageCircle size={32} fill="white" />
+          <div className="absolute inset-0 bg-white/20 rounded-full animate-ping opacity-20 group-hover:opacity-40"></div>
+          <MessageCircle size={32} fill="white" className="relative z-10" />
         </a>
       </div>
     </Router>
