@@ -3,10 +3,11 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, setDoc 
 import { db } from '../firebase';
 import { uploadToCloudinary } from '../utils/cloudinary';
 import { generateProductDetailsFromImage } from '../utils/aiHelper';
-import { Plus, Loader2, Image as ImageIcon, CheckCircle, Trash2, Edit2, Save, LogOut, Layout, ShoppingBag, Sparkles } from 'lucide-react';
+import { Plus, Loader2, Image as ImageIcon, CheckCircle, Trash2, Edit2, Save, LogOut, Layout, ShoppingBag, Sparkles, Database } from 'lucide-react';
 import { Product, SiteContent } from '../types';
 import { useProducts } from '../hooks/useProducts';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { PRODUCTS as DEMO_PRODUCTS } from '../constants';
 
 const Admin: React.FC = () => {
   // Auth State
@@ -114,6 +115,9 @@ const ProductManager: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
+  // Check if we are currently using mock data
+  const isMockData = products === DEMO_PRODUCTS;
+
   // Load product into form for editing
   const handleEdit = (product: Product) => {
     setEditingId(product.id);
@@ -139,8 +143,36 @@ const ProductManager: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
+    if (isMockData) {
+      alert("Cannot delete demo data. Please initialize the database first.");
+      return;
+    }
     if (window.confirm('Are you sure you want to delete this product?')) {
       await deleteDoc(doc(db, "products", id));
+    }
+  };
+
+  const handleSeedDatabase = async () => {
+    if (!window.confirm("This will upload all demo products to your Firebase database. Continue?")) return;
+    setIsLoading(true);
+    try {
+      let count = 0;
+      for (const p of DEMO_PRODUCTS) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id, ...data } = p; // Remove ID to let Firestore generate a new one
+        await addDoc(collection(db, "products"), {
+          ...data,
+          createdAt: serverTimestamp()
+        });
+        count++;
+      }
+      setSuccessMsg(`Successfully initialized database with ${count} products!`);
+      setTimeout(() => setSuccessMsg(''), 5000);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to seed database.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -163,6 +195,10 @@ const ProductManager: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isMockData && editingId) {
+       alert("Cannot edit demo data directly. Please initialize the database first.");
+       return;
+    }
     setIsLoading(true);
     try {
       let imageUrl = formData.image;
@@ -336,7 +372,20 @@ const ProductManager: React.FC = () => {
 
       {/* List Section */}
       <div className="lg:col-span-2">
-        <h2 className="text-xl font-serif font-bold text-brand-brown mb-4">Inventory ({products.length})</h2>
+        <div className="flex justify-between items-center mb-4">
+           <h2 className="text-xl font-serif font-bold text-brand-brown">Inventory ({products.length})</h2>
+           {isMockData && (
+             <button 
+                onClick={handleSeedDatabase}
+                disabled={isLoading}
+                className="bg-brand-rose text-brand-brown px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-brand-roseDark transition-colors"
+             >
+                {isLoading ? <Loader2 className="animate-spin" size={16}/> : <Database size={16}/>}
+                Push Demo Data to Database
+             </button>
+           )}
+        </div>
+        
         {productsLoading ? (
            <div className="flex justify-center p-8"><Loader2 className="animate-spin text-brand-sageDark"/></div>
         ) : (
@@ -351,12 +400,14 @@ const ProductManager: React.FC = () => {
                     <button 
                       onClick={() => handleEdit(product)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                      title={isMockData ? "Demo data is read-only" : "Edit"}
                     >
                       <Edit2 size={16} />
                     </button>
                     <button 
                       onClick={() => handleDelete(product.id)}
                       className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                      title={isMockData ? "Demo data is read-only" : "Delete"}
                     >
                       <Trash2 size={16} />
                     </button>
