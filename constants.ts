@@ -101,4 +101,4 @@ export const TESTIMONIALS: Testimonial[] = [
   }
 ];
 
-export const WHATSAPP_NUMBER = "1234567890"; // Demo number
+export const WHATSAPP_NUMBER = "254759094016";

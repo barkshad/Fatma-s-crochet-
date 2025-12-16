@@ -15,9 +15,17 @@ const Footer: React.FC = () => {
               Handmade with love, care, and the finest materials. Bringing warmth to your home and wardrobe.
             </p>
             <div className="flex justify-center md:justify-start space-x-4">
-              <a href="#" className="hover:text-brand-roseDark transition-colors"><Instagram size={24} /></a>
-              <a href="#" className="hover:text-brand-roseDark transition-colors"><Facebook size={24} /></a>
-              <a href="mailto:hello@fatmascrochet.com" className="hover:text-brand-roseDark transition-colors"><Mail size={24} /></a>
+              <a 
+                href="https://www.instagram.com/xx.fxtma_xx?igsh=MWk1d2dmODhkN2RkcQ==" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-brand-roseDark transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram size={24} />
+              </a>
+              <a href="#" className="hover:text-brand-roseDark transition-colors" aria-label="Facebook"><Facebook size={24} /></a>
+              <a href="mailto:hello@fatmascrochet.com" className="hover:text-brand-roseDark transition-colors" aria-label="Email"><Mail size={24} /></a>
             </div>
           </div>
 
