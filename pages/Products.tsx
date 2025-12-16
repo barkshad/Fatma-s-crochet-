@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { Filter } from 'lucide-react';
+import { Filter, Loader2 } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { PRODUCTS } from '../constants';
+import { useProducts } from '../hooks/useProducts';
 
 const Products: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const { products, loading } = useProducts();
   
-  const categories = ['All', 'Bags', 'Sweaters', 'Baby', 'Accessories'];
+  const categories = ['All', 'Bags', 'Sweaters', 'Baby', 'Accessories', 'Home'];
   
   const filteredProducts = activeCategory === 'All' 
-    ? PRODUCTS 
-    : PRODUCTS.filter(p => p.category === activeCategory);
+    ? products 
+    : products.filter(p => p.category === activeCategory);
 
   return (
     <div className="bg-brand-cream min-h-screen py-12">
@@ -50,7 +51,11 @@ const Products: React.FC = () => {
         </div>
 
         {/* Grid */}
-        {filteredProducts.length > 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+             <Loader2 className="animate-spin text-brand-sageDark" size={48} />
+          </div>
+        ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />

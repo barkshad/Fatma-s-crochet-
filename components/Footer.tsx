@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Facebook, Heart, Mail } from 'lucide-react';
+import { Instagram, Facebook, Heart, Mail, Lock } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -52,10 +52,13 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="border-t border-brand-cream/20 mt-12 pt-8 text-center font-sans text-sm text-brand-cream/60">
-          <p className="flex items-center justify-center gap-1">
+        <div className="border-t border-brand-cream/20 mt-12 pt-8 text-center font-sans text-sm text-brand-cream/60 flex flex-col items-center">
+          <p className="flex items-center justify-center gap-1 mb-2">
             © {new Date().getFullYear()} Fatma's Crochet Corner. Made with <Heart size={14} className="text-brand-roseDark fill-current" />
           </p>
+          <Link to="/admin" className="flex items-center gap-1 text-xs opacity-50 hover:opacity-100 transition-opacity">
+            <Lock size={12} /> Admin Login
+          </Link>
         </div>
       </div>
     </footer>

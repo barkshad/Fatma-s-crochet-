@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Heart, Star, Sparkles, MessageCircle } from 'lucide-react';
+import { ArrowRight, Heart, Star, Sparkles, MessageCircle, Loader2 } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { PRODUCTS, TESTIMONIALS, WHATSAPP_NUMBER } from '../constants';
+import { TESTIMONIALS, WHATSAPP_NUMBER } from '../constants';
+import { useProducts } from '../hooks/useProducts';
 
 const Home: React.FC = () => {
-  const featuredProducts = PRODUCTS.filter(p => p.isFeatured).slice(0, 3);
+  const { products, loading } = useProducts();
+  const featuredProducts = products.filter(p => p.isFeatured).slice(0, 3);
 
   return (
     <div className="w-full overflow-x-hidden">
@@ -75,11 +77,17 @@ const Home: React.FC = () => {
             <p className="mt-4 text-brand-text/70">Pieces our customers can't stop raving about.</p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <Loader2 className="animate-spin text-brand-sageDark" size={40} />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredProducts.map(product => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
 
           <div className="text-center mt-12">
             <Link to="/products" className="inline-flex items-center text-brand-sageDark font-semibold hover:text-brand-brown transition-colors border-b-2 border-brand-sageDark pb-1">

@@ -8,6 +8,7 @@ export interface Product {
   materials: string;
   care: string;
   isFeatured?: boolean;
+  createdAt?: any; // Timestamp from Firestore
 }
 
 export interface Testimonial {

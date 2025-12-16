@@ -7,6 +7,7 @@ import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Admin from './pages/Admin'; // Import Admin
 import { MessageCircle } from 'lucide-react';
 import { WHATSAPP_NUMBER } from './constants';
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </main>
 

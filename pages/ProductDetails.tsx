@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MessageCircle, Truck, RefreshCw, ShieldCheck } from 'lucide-react';
-import { PRODUCTS, WHATSAPP_NUMBER } from '../constants';
+import { ArrowLeft, MessageCircle, Truck, RefreshCw, ShieldCheck, Loader2 } from 'lucide-react';
+import { WHATSAPP_NUMBER } from '../constants';
+import { useProducts } from '../hooks/useProducts';
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const product = PRODUCTS.find(p => p.id === id);
+  const { products, loading } = useProducts();
   const [selectedColor, setSelectedColor] = useState('Default');
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-brand-cream">
+         <Loader2 className="animate-spin text-brand-sageDark" size={48} />
+      </div>
+    )
+  }
+
+  const product = products.find(p => p.id === id);
 
   if (!product) {
     return (
