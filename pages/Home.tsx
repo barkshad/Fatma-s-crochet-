@@ -2,12 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Heart, Star, Sparkles, MessageCircle, Loader2 } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { TESTIMONIALS, WHATSAPP_NUMBER } from '../constants';
+import { TESTIMONIALS } from '../constants';
 import { useProducts } from '../hooks/useProducts';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 const Home: React.FC = () => {
-  const { products, loading } = useProducts();
+  const { products, loading: productsLoading } = useProducts();
+  const { content, loading: contentLoading } = useSiteContent();
   const featuredProducts = products.filter(p => p.isFeatured).slice(0, 3);
+
+  if (contentLoading) {
+    return <div className="min-h-screen flex items-center justify-center bg-brand-cream"><Loader2 className="animate-spin text-brand-sageDark" size={48} /></div>;
+  }
 
   return (
     <div className="w-full overflow-x-hidden">
@@ -20,12 +26,11 @@ const Home: React.FC = () => {
               <span className="inline-block py-1 px-3 bg-brand-rose rounded-full text-brand-brown text-sm font-semibold tracking-wide mb-2">
                 Est. 2023
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-brand-brown leading-tight">
-                Handmade With Love, <br/>
-                <span className="text-brand-sageDark italic">One Stitch at a Time</span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-brand-brown leading-tight whitespace-pre-line">
+                {content.heroTitle}
               </h1>
               <p className="text-lg md:text-xl text-brand-text/80 font-sans max-w-lg mx-auto md:mx-0">
-                Discover our collection of cozy sweaters, custom bags, and baby gifts. Each piece is crafted by hand for a unique touch.
+                {content.heroSubtitle}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
                 <Link 
@@ -35,7 +40,7 @@ const Home: React.FC = () => {
                   View Collection <ArrowRight size={18} />
                 </Link>
                 <a 
-                  href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                  href={`https://wa.me/${content.whatsappNumber}`}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="bg-white border-2 border-brand-rose text-brand-brown px-8 py-3.5 rounded-full font-medium text-lg hover:bg-brand-rose/20 transition-all flex items-center justify-center gap-2"
@@ -53,13 +58,13 @@ const Home: React.FC = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <img 
-                  src="https://picsum.photos/id/1025/400/500" 
-                  alt="Crochet knitting" 
+                  src={content.heroImage1} 
+                  alt="Crochet visual 1" 
                   className="rounded-2xl shadow-lg transform translate-y-8 object-cover h-64 w-full"
                 />
                 <img 
-                  src="https://picsum.photos/id/445/400/500" 
-                  alt="Yarn balls" 
+                  src={content.heroImage2} 
+                  alt="Crochet visual 2" 
                   className="rounded-2xl shadow-lg object-cover h-64 w-full"
                 />
               </div>
@@ -77,7 +82,7 @@ const Home: React.FC = () => {
             <p className="mt-4 text-brand-text/70">Pieces our customers can't stop raving about.</p>
           </div>
           
-          {loading ? (
+          {productsLoading ? (
             <div className="flex justify-center py-10">
               <Loader2 className="animate-spin text-brand-sageDark" size={40} />
             </div>

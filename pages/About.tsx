@@ -1,7 +1,14 @@
 import React from 'react';
-import { Heart } from 'lucide-react';
+import { Heart, Loader2 } from 'lucide-react';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 const About: React.FC = () => {
+  const { content, loading } = useSiteContent();
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center bg-brand-cream"><Loader2 className="animate-spin text-brand-sageDark" size={48} /></div>;
+  }
+
   return (
     <div className="bg-brand-cream min-h-screen py-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,18 +22,18 @@ const About: React.FC = () => {
            <div className="md:flex">
              <div className="md:w-1/2 h-80 md:h-auto">
                <img 
-                 src="https://picsum.photos/id/453/800/800" 
+                 src={content.aboutImage} 
                  alt="Fatma working on crochet" 
                  className="w-full h-full object-cover"
                />
              </div>
              <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-               <h2 className="text-2xl font-serif font-bold text-brand-brown mb-4">Hi, I'm Fatma!</h2>
-               <p className="text-brand-text/80 mb-4 leading-relaxed">
-                 Welcome to my cozy corner of the internet. I started crocheting five years ago when I wanted to make a blanket for my nephew. What began as a small hobby quickly turned into a deep passion for fiber arts.
+               <h2 className="text-2xl font-serif font-bold text-brand-brown mb-4">{content.aboutTitle}</h2>
+               <p className="text-brand-text/80 mb-4 leading-relaxed whitespace-pre-line">
+                 {content.aboutText1}
                </p>
-               <p className="text-brand-text/80 mb-4 leading-relaxed">
-                 There is something incredibly grounding about taking a simple string of yarn and turning it into something functional, warm, and beautiful.
+               <p className="text-brand-text/80 mb-4 leading-relaxed whitespace-pre-line">
+                 {content.aboutText2}
                </p>
                <div className="flex items-center gap-2 text-brand-sageDark font-semibold mt-4">
                  <Heart size={20} fill="currentColor" />

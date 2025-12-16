@@ -8,7 +8,7 @@ export interface Product {
   materials: string;
   care: string;
   isFeatured?: boolean;
-  createdAt?: any; // Timestamp from Firestore
+  createdAt?: any;
 }
 
 export interface Testimonial {
@@ -16,4 +16,19 @@ export interface Testimonial {
   name: string;
   text: string;
   location: string;
+}
+
+export interface SiteContent {
+  heroTitle: string;
+  heroSubtitle: string;
+  heroImage1: string;
+  heroImage2: string;
+  aboutTitle: string;
+  aboutText1: string;
+  aboutText2: string;
+  aboutImage: string;
+  contactEmail: string;
+  contactPhone: string;
+  whatsappNumber: string;
+  instagramUrl: string;
 }

@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
-import { Send, Phone, Mail, MapPin } from 'lucide-react';
-import { WHATSAPP_NUMBER } from '../constants';
+import { Send, Phone, Mail, MapPin, Loader2 } from 'lucide-react';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 const Contact: React.FC = () => {
+  const { content, loading } = useSiteContent();
   const [formData, setFormData] = useState({
     name: '',
     message: ''
   });
 
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center bg-brand-cream"><Loader2 className="animate-spin text-brand-sageDark" size={48} /></div>;
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Redirect to WhatsApp with the message
     const text = `Hi, I'm ${formData.name}. ${formData.message}`;
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    const url = `https://wa.me/${content.whatsappNumber}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
   };
 
@@ -41,7 +46,7 @@ const Contact: React.FC = () => {
                    </div>
                    <div>
                      <p className="font-semibold text-brand-brown">WhatsApp</p>
-                     <p className="text-brand-text/70">+254 759 094016</p>
+                     <p className="text-brand-text/70">{content.contactPhone}</p>
                      <p className="text-xs text-brand-text/50">Fastest response time</p>
                    </div>
                  </div>
@@ -52,7 +57,7 @@ const Contact: React.FC = () => {
                    </div>
                    <div>
                      <p className="font-semibold text-brand-brown">Email</p>
-                     <p className="text-brand-text/70">hello@fatmascrochet.com</p>
+                     <p className="text-brand-text/70">{content.contactEmail}</p>
                    </div>
                  </div>
 
